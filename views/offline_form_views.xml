@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_zweb_offline_form_tree" model="ir.ui.view">
+        <field name="name">zweb.offline.form.list</field>
+        <field name="model">zweb.offline.form</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="target_model"/>
+                <field name="require_login"/>
+                <field name="active"/>
+                <field name="version"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_zweb_offline_form_form" model="ir.ui.view">
+        <field name="name">zweb.offline.form.form</field>
+        <field name="model">zweb.offline.form</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="target_model"/>
+                        <field name="active"/>
+                        <field name="version"/>
+                    </group>
+                    <group>
+                        <field name="require_login"/>
+                        <field name="allowed_group_ids" widget="many2many_tags"/>
+                        <field name="allow_attachments"/>
+                    </group>
+                    <group>
+                        <field name="allowed_fields" placeholder="fecha_inicio, fecha_fin, motivo"/>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_zweb_offline_form" model="ir.actions.act_window">
+        <field name="name">Offline Forms</field>
+        <field name="res_model">zweb.offline.form</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_zweb_offline_submission_tree" model="ir.ui.view">
+        <field name="name">zweb.offline.form.submission.list</field>
+        <field name="model">zweb.offline.form.submission</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="create_date"/>
+                <field name="form_id"/>
+                <field name="user_id"/>
+                <field name="local_uuid"/>
+                <field name="state"/>
+                <field name="target_model"/>
+                <field name="target_res_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_zweb_offline_submission_form" model="ir.ui.view">
+        <field name="name">zweb.offline.form.submission.form</field>
+        <field name="model">zweb.offline.form.submission</field>
+        <field name="arch" type="xml">
+            <form create="false" edit="false">
+                <sheet>
+                    <group>
+                        <field name="form_id"/>
+                        <field name="user_id"/>
+                        <field name="partner_id"/>
+                        <field name="local_uuid"/>
+                        <field name="state"/>
+                    </group>
+                    <group>
+                        <field name="target_model"/>
+                        <field name="target_res_id"/>
+                        <field name="submitted_at"/>
+                        <field name="processed_at"/>
+                    </group>
+                    <notebook>
+                        <page string="Payload">
+                            <field name="payload_json" widget="text"/>
+                        </page>
+                        <page string="Error">
+                            <field name="error_message" widget="text"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_zweb_offline_submission" model="ir.actions.act_window">
+        <field name="name">Offline Submissions</field>
+        <field name="res_model">zweb.offline.form.submission</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_zweb_offline_root" name="Offline Forms" parent="website.menu_website_configuration" sequence="95"/>
+    <menuitem id="menu_zweb_offline_forms" name="Forms" parent="menu_zweb_offline_root" action="action_zweb_offline_form" sequence="10"/>
+    <menuitem id="menu_zweb_offline_submissions" name="Submissions" parent="menu_zweb_offline_root" action="action_zweb_offline_submission" sequence="20"/>
+</odoo>

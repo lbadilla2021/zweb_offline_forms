@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_zweb_offline_form_user,zweb.offline.form user,model_zweb_offline_form,base.group_user,1,0,0,0
+access_zweb_offline_form_manager,zweb.offline.form manager,model_zweb_offline_form,base.group_system,1,1,1,1
+access_zweb_offline_submission_user,zweb.offline.form.submission user,model_zweb_offline_form_submission,base.group_user,1,0,0,0
+access_zweb_offline_submission_manager,zweb.offline.form.submission manager,model_zweb_offline_form_submission,base.group_system,1,1,1,1

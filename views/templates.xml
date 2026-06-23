@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="generic_form_page" name="Generic Offline Form Page">
+        <t t-call="website.layout">
+            <div class="container my-5">
+                <h1><t t-esc="offline_form.name"/></h1>
+                <p class="text-muted">Formulario offline de prueba: <t t-esc="offline_form.code"/></p>
+                <form data-offline-form="true"
+                      t-att-data-form-code="offline_form.code"
+                      data-sync-endpoint="/offline/form/submit"
+                      class="z-offline-form">
+                    <div class="mb-3">
+                        <label class="form-label">Descripción</label>
+                        <textarea name="description" class="form-control" rows="4" required="required"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Fecha</label>
+                        <input name="date" type="date" class="form-control"/>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar / sincronizar</button>
+                </form>
+            </div>
+        </t>
+    </template>
+</odoo>
