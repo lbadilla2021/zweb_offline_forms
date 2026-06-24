@@ -3,3 +3,5 @@ access_zweb_offline_form_user,zweb.offline.form user,model_zweb_offline_form,bas
 access_zweb_offline_form_manager,zweb.offline.form manager,model_zweb_offline_form,base.group_system,1,1,1,1
 access_zweb_offline_submission_user,zweb.offline.form.submission user,model_zweb_offline_form_submission,base.group_user,1,0,0,0
 access_zweb_offline_submission_manager,zweb.offline.form.submission manager,model_zweb_offline_form_submission,base.group_system,1,1,1,1
+access_zweb_offline_form_token_user_manager,zweb.offline.form.token.user manager,model_zweb_offline_form_token_user,base.group_system,1,1,1,1
+access_zweb_offline_form_token_wizard_manager,zweb.offline.form.token.wizard manager,model_zweb_offline_form_token_wizard,base.group_system,1,1,1,1

@@ -17,6 +17,20 @@ class ZWebOfflineFormSubmission(models.Model):
     form_id = fields.Many2one('zweb.offline.form', required=True, ondelete='restrict')
     user_id = fields.Many2one('res.users', default=lambda self: self.env.user, index=True)
     partner_id = fields.Many2one('res.partner', related='user_id.partner_id', store=True, readonly=True)
+    external_user_id = fields.Many2one(
+        'zweb.offline.form.token.user',
+        string='External User',
+        readonly=True,
+        copy=False,
+        index=True,
+    )
+    external_login_snapshot = fields.Char(readonly=True, copy=False)
+    auth_method = fields.Selection([
+        ('odoo_user', 'Odoo User'),
+        ('external_token', 'External Token'),
+    ], default='odoo_user', required=True, readonly=True, copy=False)
+    remote_addr = fields.Char(readonly=True, copy=False)
+    user_agent = fields.Char(readonly=True, copy=False)
     payload_json = fields.Text(required=True)
     target_model = fields.Char(related='form_id.target_model', store=True, readonly=True)
     target_res_id = fields.Integer(readonly=True)
@@ -56,6 +70,12 @@ class ZWebOfflineFormSubmission(models.Model):
                     vals['x_offline_local_uuid'] = rec.local_uuid
                 if 'x_offline_submission_id' in model._fields:
                     vals['x_offline_submission_id'] = rec.id
+                if 'external_token_user_id' in model._fields and rec.external_user_id:
+                    vals['external_token_user_id'] = rec.external_user_id.id
+                if 'external_login_snapshot' in model._fields and rec.external_login_snapshot:
+                    vals['external_login_snapshot'] = rec.external_login_snapshot
+                if 'offline_auth_method' in model._fields:
+                    vals['offline_auth_method'] = rec.auth_method
 
                 created = model.create(vals)
                 rec.write({

@@ -14,6 +14,7 @@
     'assets': {
         'web.assets_frontend': [
             'zweb_offline_forms/static/src/js/offline_db.js',
+            'zweb_offline_forms/static/src/js/offline_auth.js',
             'zweb_offline_forms/static/src/js/offline_forms.js',
             'zweb_offline_forms/static/src/js/offline_sync.js',
         ],

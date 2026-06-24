@@ -36,7 +36,18 @@
         box.textContent = message;
     }
 
-    async function savePending(form) {
+    function setHiddenValue(form, name, value) {
+        let input = form.querySelector('input[name="' + name + '"]');
+        if (!input) {
+            input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = name;
+            form.appendChild(input);
+        }
+        input.value = value || '';
+    }
+
+    async function savePending(form, authData) {
         if (!window.ZOfflineDB) {
             throw new Error('ZOfflineDB no está disponible.');
         }
@@ -55,6 +66,14 @@
             synced_at: null,
             server_response: null,
         };
+        if (authData && authData.access_token) {
+            record.auth = {
+                mode: 'external_token',
+                access_token: authData.access_token,
+                expires_at: authData.expires_at,
+                external_user: authData.external_user || null,
+            };
+        }
         await window.ZOfflineDB.put(record);
         return record;
     }
@@ -65,14 +84,34 @@
             return;
         }
 
+        const authRequired = window.ZOfflineAuth && window.ZOfflineAuth.isExternalAuthRequired(form);
+        if (authRequired) {
+            event.preventDefault();
+        }
+
+        let authData = null;
+        try {
+            authData = window.ZOfflineAuth
+                ? await window.ZOfflineAuth.ensureAuthenticated(form)
+                : null;
+        } catch (err) {
+            event.preventDefault();
+            showMessage(form, err.message, 'danger');
+            return;
+        }
+
         // Only intercept when offline; when online let the form submit normally.
         if (navigator.onLine) {
+            if (authRequired) {
+                setHiddenValue(form, 'external_access_token', authData.access_token);
+                HTMLFormElement.prototype.submit.call(form);
+            }
             return;
         }
 
         event.preventDefault();
         try {
-            const record = await savePending(form);
+            const record = await savePending(form, authData);
             showMessage(form, 'Sin conexión: datos guardados localmente. Se sincronizarán al recuperar la conexión.', 'warning');
             form.dispatchEvent(new CustomEvent('z-offline-saved', { detail: record, bubbles: true }));
         } catch (err) {
